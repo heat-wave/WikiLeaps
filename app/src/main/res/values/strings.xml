@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WikiLeaps</string>
+
+    <string name="action_replay">Restart game</string>
+    <string name="action_help">Help</string>
+
+    <string name="title_activity_game">GameActivity</string>
+    <string name="congratulations">Success!</string>
+    <string name="no_way_out">You can only use links to other articles!</string>
+    <string name="title_activity_high_score">HighScoreActivity</string>
+    <string name="start_game"><b>New game</b></string>
+    <string name="back_to_menu"><b>Back to menu</b></string>
+    <string name="mode_easy"><b>Easy</b></string>
+    <string name="mode_medium"><b>Medium</b></string>
+    <string name="mode_hard"><b>Hard</b></string>
+    <string name="history"><b>History</b></string>
+</resources>

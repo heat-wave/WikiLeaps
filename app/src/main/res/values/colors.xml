@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentTransparent">#33FF4081</color>
+    <color name="main_menu_text_color">#eafcfc</color>
+    <color name="main_menu_button">#ffffff</color>
+    <color name="button_released_gradient_start">#364548</color>
+    <color name="button_released_gradient_end">#253032</color>
+    <color name="button_pressed_gradient_start">#2e3a3d</color>
+    <color name="button_pressed_gradient_end">#1d2527</color>
+    <color name="background_game">#151a1b</color>
+</resources>

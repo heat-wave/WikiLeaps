@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="heat_wave.wikileaps.GameActivity">
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/wiki"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/game_toolbar"
+        android:layout_width="match_parent"
+        android:title="@string/app_name"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/button_pressed_gradient_start"
+        android:textColor="@color/main_menu_text_color"
+        android:subtitleTextColor="@color/main_menu_text_color"
+        android:titleTextColor="@color/main_menu_text_color"
+        android:elevation="4dp"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:id="@+id/gameOverlay"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="@color/main_menu_text_color"
+            android:layout_marginBottom="@dimen/screenCenterMargin"
+            android:id="@+id/topSlide"
+            android:text="@string/mode_easy"
+            android:background="@color/background_game"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="@color/main_menu_text_color"
+            android:layout_marginTop="@dimen/screenCenterMargin"
+            android:id="@+id/bottomSlide"
+            android:gravity="right"
+            android:text="@string/mode_easy"
+            android:background="@color/background_game"/>
+    </LinearLayout>
+</RelativeLayout>
