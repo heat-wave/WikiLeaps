@@ -23,6 +23,14 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/pseudoblur"
+        android:orientation="vertical"
+        android:background="@color/trans">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="@null"
@@ -36,17 +44,19 @@
             android:textColor="@color/main_menu_text_color"
             android:layout_marginBottom="@dimen/screenCenterMargin"
             android:id="@+id/topSlide"
-            android:text="@string/mode_easy"
-            android:background="@color/background_game"/>
+            android:fontFamily="georgia"
+            android:background="@color/trans"
+            android:gravity="center"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24dp"
+            android:background="@color/trans"
             android:textColor="@color/main_menu_text_color"
             android:layout_marginTop="@dimen/screenCenterMargin"
             android:id="@+id/bottomSlide"
-            android:gravity="right"
-            android:text="@string/mode_easy"
-            android:background="@color/background_game"/>
+            android:gravity="center"
+            android:fontFamily="georgia"/>
     </LinearLayout>
+
 </RelativeLayout>

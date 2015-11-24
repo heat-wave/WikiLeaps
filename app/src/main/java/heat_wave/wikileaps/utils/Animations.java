@@ -1,6 +1,8 @@
 package heat_wave.wikileaps.utils;
 
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.animation.Animator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
@@ -48,5 +50,16 @@ public class Animations {
         return outtoRight;
     }
 
+    public static Animation fadeInAnimation() {
+        Animation fadeIn = new AlphaAnimation(0f, 1f);
+        fadeIn.setDuration(1000);
+        return fadeIn;
+    }
+
+    public static Animation fadeOutAnimation() {
+        Animation fadeOut = new AlphaAnimation(1f, 0f);
+        fadeOut.setDuration(1000);
+        return fadeOut;
+    }
     public Animations() {}
 }

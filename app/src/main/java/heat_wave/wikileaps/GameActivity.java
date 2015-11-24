@@ -14,10 +14,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
@@ -35,18 +40,18 @@ public class GameActivity extends AppCompatActivity {
     private String path;
     private SharedPreferences sharedPreferences;
     private boolean gameFinished;
-    private int secondsToOverlayHide = 5;
+    private int secondsToOverlayHide = 6;
     private TextView topSlide;
     private TextView bottomSlide;
     private Handler timeHandler;
     private String startingPage;
     private WebView webView;
-
+    private LinearLayout trans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
+        trans = (LinearLayout)findViewById(R.id.pseudoblur);
         Toolbar gameToolbar = (Toolbar) findViewById(R.id.game_toolbar);
         setSupportActionBar(gameToolbar);
         getSupportActionBar().setTitle(R.string.app_name);
@@ -65,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
         webView.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeBottom() {
                 getSupportActionBar().show();
-                secondsToOverlayHide = 5;
+                secondsToOverlayHide = 6;
             }
 
             @Override
@@ -97,7 +102,7 @@ public class GameActivity extends AppCompatActivity {
 
             if (secondsToOverlayHide > 0) {
                 secondsToOverlayHide--;
-                if (secondsToOverlayHide == 0) {
+                if (secondsToOverlayHide == 1) {
                     hideOverlay();
                 }
             }
@@ -124,13 +129,14 @@ public class GameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_replay:
-                path = "";
+                if (!path.contains(" -> "))
+                    path = "";
                 webView.loadUrl(startingPage);
                 return true;
 
             case R.id.action_help:
                 showOverlay();
-                secondsToOverlayHide = 5;
+                secondsToOverlayHide = 6;
                 return true;
 
             default:
@@ -193,6 +199,8 @@ public class GameActivity extends AppCompatActivity {
         bottomSlide.bringToFront();
         bottomSlide.startAnimation(Animations.inFromRightAnimation());
         bottomSlide.setVisibility(View.VISIBLE);
+        trans.startAnimation(Animations.fadeInAnimation());
+        trans.setVisibility(View.VISIBLE);
     }
 
     public void hideOverlay() {
@@ -207,7 +215,10 @@ public class GameActivity extends AppCompatActivity {
             bottomSlide.startAnimation(Animations.outToRightAnimation());
             bottomSlide.setVisibility(View.INVISIBLE);
         }
-
+        if (trans.getVisibility() != View.INVISIBLE) {
+            trans.startAnimation(Animations.fadeOutAnimation());
+            trans.setVisibility(View.INVISIBLE);
+        }
         getSupportActionBar().hide();
     }
 }

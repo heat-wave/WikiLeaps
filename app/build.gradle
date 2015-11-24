@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "heat_wave.wikijump"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -20,9 +20,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+    compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile files('/home/baba_beda/Development/WikiLeaps/commons-lang-2.6.jar')
 }

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WikiJump.iml" filepath="$PROJECT_DIR$/WikiJump.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WikiLeaps.iml" filepath="$PROJECT_DIR$/WikiLeaps.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
-

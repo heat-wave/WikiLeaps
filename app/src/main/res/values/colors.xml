@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentTransparent">#33FF4081</color>
-    <color name="main_menu_text_color">#eafcfc</color>
+    <color name="main_menu_text_color">#1d1d1d</color>
     <color name="main_menu_button">#ffffff</color>
-    <color name="button_released_gradient_start">#364548</color>
-    <color name="button_released_gradient_end">#253032</color>
-    <color name="button_pressed_gradient_start">#2e3a3d</color>
-    <color name="button_pressed_gradient_end">#1d2527</color>
-    <color name="background_game">#151a1b</color>
+    <color name="button_released_gradient_start">#bebdbe</color>
+    <color name="button_released_gradient_end">#d1d1d1</color>
+    <color name="button_pressed_gradient_start">#6b6b6b</color>
+    <color name="button_pressed_gradient_end">#7f7f7f</color>
+    <color name="background_game">#ffffff</color>
+    <color name="trans">#ddffffff</color>
 </resources>
