@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionMenuTextColor">@color/background_game</item>
         <item name="android:background">@color/background_game</item>
         <item name="android:textColor">@color/main_menu_text_color</item>
     </style>

@@ -21,9 +21,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.commons.lang.StringEscapeUtils;
-
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,8 +44,14 @@ public class GameActivity extends AppCompatActivity {
     private String startingPage;
     private WebView webView;
     private LinearLayout trans;
+    private boolean firstUse;
+    private MenuItem leapCounter;
+    private int leaps;
+    private Menu menuReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firstUse = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         trans = (LinearLayout)findViewById(R.id.pseudoblur);
@@ -64,7 +67,7 @@ public class GameActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
         gameFinished = false;
         path = "";
-
+        leaps = 0;
         webView = (WebView) findViewById(R.id.wiki);
         webView.setWebViewClient(new TrackingWebViewClient());
         webView.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -90,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         webView.loadUrl("https://en.m.wikipedia.org/wiki/Special:Random");
-        bottomSlide.setText(difficulty.toString());
+
         showOverlay();
         timeHandler = new Handler();
         startTimeTracking();
@@ -105,6 +108,11 @@ public class GameActivity extends AppCompatActivity {
                 if (secondsToOverlayHide == 1) {
                     hideOverlay();
                 }
+            }
+            if (topSlide.getText().length() == 0 && !webView.getUrl().equals("https://en.m.wikipedia.org/wiki/Special:Random")) {
+                bottomSlide.setText(difficulty.toString());
+                String url = parseUnicodeString(webView.getUrl());
+                topSlide.setText(url.substring(url.lastIndexOf('/') + 1).replace('_', ' '));
             }
             timeHandler.postDelayed(intervalChecker, 1000);
         }
@@ -122,6 +130,8 @@ public class GameActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_bar, menu);
+        this.menuReference = menu;
+        leapCounter = menuReference.findItem(R.id.leaps);
         return true;
     }
 
@@ -129,9 +139,12 @@ public class GameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_replay:
-                if (!path.contains(" -> "))
-                    path = "";
+                //if (!path.contains(" -> "));
                 webView.loadUrl(startingPage);
+                String url = parseUnicodeString(webView.getUrl());
+                path = url.substring(url.lastIndexOf('/') + 1).replace('_', ' ');
+                leaps = 0;
+                leapCounter.setTitle(Integer.toString(leaps));
                 return true;
 
             case R.id.action_help:
@@ -157,11 +170,14 @@ public class GameActivity extends AppCompatActivity {
 
             if (path.length() == 0) {
                 startingPage = url;
+                leaps = 0;
             }
+            else {
+                leaps++;
+            }
+            leapCounter.setTitle(Integer.toString(leaps));
+
             path = path + (path.length() > 0 ? " -> " : "") + (url.substring(url.lastIndexOf('/') + 1)).replace('_', ' ');
-            if (!path.contains(" -> ")) {
-                topSlide.setText(path);
-            }
             if (!gameFinished && path.contains(difficulty.toString())) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(path, path);
@@ -193,14 +209,19 @@ public class GameActivity extends AppCompatActivity {
 
     public void showOverlay() {
         topSlide.bringToFront();
-        topSlide.startAnimation(Animations.inFromLeftAnimation());
+        if (!firstUse)
+            topSlide.startAnimation(Animations.inFromLeftAnimation());
         topSlide.setVisibility(View.VISIBLE);
 
         bottomSlide.bringToFront();
-        bottomSlide.startAnimation(Animations.inFromRightAnimation());
+        if (!firstUse)
+            bottomSlide.startAnimation(Animations.inFromRightAnimation());
         bottomSlide.setVisibility(View.VISIBLE);
+
         trans.startAnimation(Animations.fadeInAnimation());
         trans.setVisibility(View.VISIBLE);
+
+        firstUse = false;
     }
 
     public void hideOverlay() {

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:textSize="32sp">
+
+    <item
+        android:id="@+id/leaps"
+        android:title="@string/zero"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_help"
