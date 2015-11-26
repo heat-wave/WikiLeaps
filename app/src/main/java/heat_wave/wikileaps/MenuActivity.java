@@ -3,9 +3,11 @@ package heat_wave.wikileaps;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import heat_wave.wikileaps.utils.Animations;
@@ -20,8 +22,12 @@ public class MenuActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        TextView title = (TextView) findViewById(R.id.title);
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Hoefler Text.ttf");
+        title.setTypeface(custom_font);
         flipper = (ViewFlipper)findViewById(R.id.flipper);
     }
 

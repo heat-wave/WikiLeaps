@@ -143,6 +143,8 @@ public class GameActivity extends AppCompatActivity {
                 webView.loadUrl(startingPage);
                 String url = parseUnicodeString(webView.getUrl());
                 path = url.substring(url.lastIndexOf('/') + 1).replace('_', ' ');
+                firstUse = true;
+                showOverlay();
                 leaps = 0;
                 leapCounter.setTitle(Integer.toString(leaps));
                 return true;
