@@ -25,9 +25,9 @@ public class MenuActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        TextView title = (TextView) findViewById(R.id.title);
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Hoefler Text.ttf");
-        title.setTypeface(custom_font);
+        //TextView title = (TextView) findViewById(R.id.title);
+        //Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Hoefler Text.ttf");
+        //title.setTypeface(custom_font);
         flipper = (ViewFlipper)findViewById(R.id.flipper);
     }
 

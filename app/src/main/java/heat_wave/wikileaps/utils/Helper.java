@@ -33,7 +33,7 @@ public class Helper {
         return paths.size();
     }
 
-    public static String getHighscore(int position) {
+    public static String getHistory(int position) {
         return paths.get(position);
     }
 
