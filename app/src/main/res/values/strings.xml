@@ -15,4 +15,7 @@
     <string name="mode_hard"><b>Hard</b></string>
     <string name="history"><b>History</b></string>
     <string name="zero">0</string>
+    <string name="title">WikiLeaps</string>
+    <string name="wiki">Wiki</string>
+    <string name="leaps">Leaps</string>
 </resources>
