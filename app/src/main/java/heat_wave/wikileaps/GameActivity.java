@@ -21,6 +21,10 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +36,10 @@ import heat_wave.wikileaps.utils.OnSwipeTouchListener;
 
 public class GameActivity extends AppCompatActivity {
 
+
     public static final String DIFFICULTY = "difficulty";
+    public static final String TAG = "wiki_leaps";
+
     private Difficulty difficulty;
     private String path;
     private SharedPreferences sharedPreferences;
@@ -110,7 +117,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
             if (topSlide.getText().length() == 0 && !webView.getUrl().equals("https://en.m.wikipedia.org/wiki/Special:Random")) {
-                bottomSlide.setText(difficulty.toString());
+                bottomSlide.setText(parseUnicodeString(difficulty.toString()).replace('_', ' '));
                 String url = parseUnicodeString(webView.getUrl());
                 topSlide.setText(url.substring(url.lastIndexOf('/') + 1).replace('_', ' '));
             }
@@ -190,20 +197,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public String parseUnicodeString(String source) {
-        // parsing %HH%HH codes of Unicode symbols doesn't yield any good results
-        // so the method is commented out for now
-
-        /*Pattern pattern = Pattern.compile("%([0-9A-Z][0-9A-Z])%([0-9A-Z][0-9A-Z])");
-        Matcher matcher = pattern.matcher(source);
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-            String char1 = matcher.group(1);
-            String char2 = matcher.group(2);
-            String unEncoded = String.valueOf(Character.toChars(Integer.parseInt(char1 + char2, 16)));
-            matcher.appendReplacement(sb, new String(unEncoded.getBytes(), Charset.forName("UTF-8")));
+        try {
+            source = URLDecoder.decode(source, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, e.getMessage());
+            e.printStackTrace();
         }
-        matcher.appendTail(sb);
-        return sb.toString();*/
         return source;
     }
 
