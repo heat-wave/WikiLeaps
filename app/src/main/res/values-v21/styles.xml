@@ -10,4 +10,13 @@
         <item name="android:background">@color/button_pressed_gradient_start</item>
         <item name="android:textColor">@color/main_menu_text_color</item>
     </style>
+
+    <style name="MainMenuButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/main_menu_text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/main_menu_button</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:width">250dp</item>
+    </style>
 </resources>

@@ -22,6 +22,7 @@
         <activity
             android:name=".GameActivity"
             android:label="@string/title_activity_game"
+            android:theme="@style/AppFullScreenTheme"
             android:parentActivityName=".MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

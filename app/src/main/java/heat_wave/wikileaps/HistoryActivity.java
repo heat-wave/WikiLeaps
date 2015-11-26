@@ -21,7 +21,7 @@ public class HistoryActivity extends Activity implements HistorySelectedListener
         setContentView(R.layout.activity_high_score);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new RecyclerDividersDecorator(Color.DKGRAY));
+        recyclerView.addItemDecoration(new RecyclerDividersDecorator(Color.BLACK));
         HistoryRecyclerAdapter adapter = new HistoryRecyclerAdapter(this);
         adapter.setHistorySelectedListener(this);
         recyclerView.setAdapter(adapter);

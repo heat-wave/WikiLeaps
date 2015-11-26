@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -23,6 +24,7 @@ public class Helper {
         for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
             paths.add((String)entry.getValue());
         }
+        Collections.sort(paths);
     }
 
     public static SharedPreferences getSharedPreferences(Context context) {
