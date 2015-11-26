@@ -4,7 +4,7 @@ package heat_wave.wikileaps.utils;
  * Created by heat_wave on 11/16/15.
  */
 public enum Difficulty {
-    EASY("Łódź"),
+    EASY("Adolf Hitler"),
     MEDIUM("Coca-Cola"),
     HARD("Euclidis");
 
@@ -15,6 +15,6 @@ public enum Difficulty {
 
     @Override
     public String toString() {
-        return toFind.replace(' ', '_');
+        return toFind;
     }
 }

@@ -35,7 +35,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     @Override
     public void onBindViewHolder(HighscoreViewHolder holder, int position) {
-        String path = Helper.getHighscore(position);
+        String path = Helper.getHistory(position);
         holder.highscoreNameView.setText(path.substring(0, path.indexOf(" -> ")) +
             path.substring(path.lastIndexOf(" -> ")));
         holder.itemView.setTag(R.id.tag_highscore, path);
