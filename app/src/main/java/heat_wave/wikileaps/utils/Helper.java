@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -14,21 +16,29 @@ import java.util.Map;
 public class Helper {
     private static Context context;
     private static ArrayList<String> paths;
+    private static SharedPreferences preferences;
 
     public Helper() {}
 
-    public static void setContext(Context newContext) {
+    public static void init(Context newContext){
         context = newContext;
-        SharedPreferences preferences = getSharedPreferences(context);
-        paths = new ArrayList<>();
-        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
-            paths.add((String)entry.getValue());
-        }
-        Collections.sort(paths);
+        preferences = context.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
     }
 
-    public static SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
+    public static void setContext(Context newContext) {
+        if (preferences == null) {
+            init(newContext);
+        }
+        paths = new ArrayList<>();
+        TreeMap<String, String> ordered = new TreeMap<String, String>(Collections.reverseOrder());
+        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
+            ordered.put(entry.getKey(), (String)entry.getValue());
+        }
+        paths.addAll(ordered.values());
+    }
+
+    public static String getRunsCount() {
+        return Integer.toString(preferences.getAll().size());
     }
 
     public static int getCount() {

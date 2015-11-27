@@ -1,6 +1,8 @@
 package heat_wave.wikileaps;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.webkit.WebView;
@@ -31,6 +34,7 @@ import java.util.regex.Pattern;
 
 import heat_wave.wikileaps.utils.Animations;
 import heat_wave.wikileaps.utils.Difficulty;
+import heat_wave.wikileaps.utils.Helper;
 import heat_wave.wikileaps.utils.OnSwipeTouchListener;
 
 
@@ -52,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     private WebView webView;
     private LinearLayout trans;
     private boolean firstUse;
+    private boolean firstBackTap;
     private MenuItem leapCounter;
     private int leaps;
     private Menu menuReference;
@@ -65,6 +70,7 @@ public class GameActivity extends AppCompatActivity {
         Toolbar gameToolbar = (Toolbar) findViewById(R.id.game_toolbar);
         setSupportActionBar(gameToolbar);
         getSupportActionBar().setTitle(R.string.app_name);
+        Helper.init(this);
 
         topSlide = (TextView) findViewById(R.id.topSlide);
         bottomSlide = (TextView) findViewById(R.id.bottomSlide);
@@ -113,6 +119,7 @@ public class GameActivity extends AppCompatActivity {
             if (secondsToOverlayHide > 0) {
                 secondsToOverlayHide--;
                 if (secondsToOverlayHide == 1) {
+                    firstBackTap = true;
                     hideOverlay();
                 }
             }
@@ -131,6 +138,19 @@ public class GameActivity extends AppCompatActivity {
 
     void stopTimeTracking() {
         timeHandler.removeCallbacks(intervalChecker);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!firstBackTap) {
+            super.onBackPressed();
+        }
+        else {
+            Toast.makeText(this, "Press again to leave this game", Toast.LENGTH_SHORT).show();
+            getSupportActionBar().show();
+            secondsToOverlayHide = 6;
+            firstBackTap = false;
+        }
     }
 
     @Override
@@ -170,7 +190,8 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (path.contains(url) || (!url.contains("m.wikipedia.org/wiki/")) ||
-                    (url.contains("Special") && !url.contains("Random"))) {
+                    (url.contains("Special") && !url.contains("Random")) ||
+                    (url.contains("File:"))) {
                 Toast.makeText(getApplicationContext(), R.string.no_way_out, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -186,10 +207,11 @@ public class GameActivity extends AppCompatActivity {
             }
             leapCounter.setTitle(Integer.toString(leaps));
 
-            path = path + (path.length() > 0 ? " -> " : "") + (url.substring(url.lastIndexOf('/') + 1)).replace('_', ' ');
+            path = path + (path.length() > 0 ? " \u21d2 " : "") + (url.substring(url.lastIndexOf('/') + 1)).replace('_', ' ');
             if (!gameFinished && path.contains(difficulty.toString())) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(path, path);
+
+                editor.putString(Helper.getRunsCount(), path);
                 editor.apply();
                 Toast.makeText(getApplicationContext(), R.string.congratulations, Toast.LENGTH_SHORT).show();
                 gameFinished = true;
