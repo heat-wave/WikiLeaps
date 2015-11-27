@@ -1,17 +1,16 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:actionMenuTextColor">@color/background_game</item>
-        <item name="android:background">@color/background_game</item>
-        <item name="android:textColor">@color/main_menu_text_color</item>
+        <item name="android:textColorPrimary">@color/background_game</item>
+        <item name="android:background">@color/button_pressed_gradient_start</item>
+        <item name="android:textColor">@color/background_game</item>
     </style>
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="MainMenuButtonStyle" parent="@android:style/Widget.Button">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/main_menu_text_color</item>

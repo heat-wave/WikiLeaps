@@ -21,7 +21,7 @@ public class RecyclerDividersDecorator extends RecyclerView.ItemDecoration {
         paint = new Paint();
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(2);
     }
 
     @Override
