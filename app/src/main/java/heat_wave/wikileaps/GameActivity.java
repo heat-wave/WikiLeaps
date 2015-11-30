@@ -61,7 +61,7 @@ public class GameActivity extends AppCompatActivity {
         setSupportActionBar(gameToolbar);
         try {
             getSupportActionBar().setTitle(R.string.app_name);
-        } 
+        }
         catch (NullPointerException e) {
             Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
         }
