@@ -12,6 +12,7 @@
 
         <activity
             android:name=".MenuActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +24,7 @@
             android:name=".GameActivity"
             android:label="@string/title_activity_game"
             android:theme="@style/AppFullScreenTheme"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MenuActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
