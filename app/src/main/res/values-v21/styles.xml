@@ -5,10 +5,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:actionMenuTextColor">@color/background_game</item>
         <item name="android:textColorPrimary">@color/background_game</item>
         <item name="android:background">@color/button_pressed_gradient_start</item>
-        <item name="android:textColor">@color/background_game</item>
+        <item name="android:textColor">@color/main_menu_text_color</item>
     </style>
 
     <style name="MainMenuButtonStyle" parent="@android:style/Widget.Button">

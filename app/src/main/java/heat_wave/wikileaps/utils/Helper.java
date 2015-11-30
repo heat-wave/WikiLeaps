@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,15 +13,13 @@ import java.util.TreeMap;
  * Created by heat_wave on 11/16/15.
  */
 public class Helper {
-    private static Context context;
     private static ArrayList<String> paths;
     private static SharedPreferences preferences;
 
-    public Helper() {}
+    private Helper() {}
 
     public static void init(Context newContext){
-        context = newContext;
-        preferences = context.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
+        preferences = newContext.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
     }
 
     public static void setContext(Context newContext) {
@@ -30,7 +27,7 @@ public class Helper {
             init(newContext);
         }
         paths = new ArrayList<>();
-        TreeMap<String, String> ordered = new TreeMap<String, String>(Collections.reverseOrder());
+        TreeMap<String, String> ordered = new TreeMap<>(Collections.reverseOrder());
         for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
             ordered.put(entry.getKey(), (String)entry.getValue());
         }

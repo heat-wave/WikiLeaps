@@ -1,8 +1,6 @@
 package heat_wave.wikileaps;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,15 +8,11 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -27,10 +21,6 @@ import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import heat_wave.wikileaps.utils.Animations;
 import heat_wave.wikileaps.utils.Difficulty;
@@ -69,7 +59,13 @@ public class GameActivity extends AppCompatActivity {
         trans = (LinearLayout)findViewById(R.id.pseudoblur);
         Toolbar gameToolbar = (Toolbar) findViewById(R.id.game_toolbar);
         setSupportActionBar(gameToolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
+        try {
+            getSupportActionBar().setTitle(R.string.app_name);
+        } 
+        catch (NullPointerException e) {
+            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
+        }
+
         Helper.init(this);
 
         topSlide = (TextView) findViewById(R.id.topSlide);
@@ -147,7 +143,12 @@ public class GameActivity extends AppCompatActivity {
         }
         else {
             Toast.makeText(this, "Press again to leave this game", Toast.LENGTH_SHORT).show();
-            getSupportActionBar().show();
+            try {
+                getSupportActionBar().show();
+            }
+            catch (NullPointerException e) {
+            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
+        }
             secondsToOverlayHide = 6;
             firstBackTap = false;
         }
@@ -263,6 +264,10 @@ public class GameActivity extends AppCompatActivity {
             trans.startAnimation(Animations.fadeOutAnimation());
             trans.setVisibility(View.INVISIBLE);
         }
-        getSupportActionBar().hide();
+        try {
+            getSupportActionBar().hide();
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
+        }
     }
 }

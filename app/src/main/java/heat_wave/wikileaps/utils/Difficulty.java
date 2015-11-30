@@ -5,8 +5,8 @@ package heat_wave.wikileaps.utils;
  */
 public enum Difficulty {
     EASY("Adolf Hitler"),
-    MEDIUM("Coca-Cola"),
-    HARD("Euclidis");
+    MEDIUM("Herostratus"),
+    HARD("André Breton");
 
     private String toFind;
     Difficulty(String toFind) {
