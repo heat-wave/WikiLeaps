@@ -3,6 +3,9 @@ package heat_wave.wikileaps;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +24,13 @@ import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.concurrent.ExecutionException;
 
 import heat_wave.wikileaps.utils.Animations;
 import heat_wave.wikileaps.utils.Difficulty;
 import heat_wave.wikileaps.utils.Helper;
 import heat_wave.wikileaps.utils.OnSwipeTouchListener;
+import heat_wave.wikileaps.utils.SharedPrefsLoadTask;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -50,12 +55,20 @@ public class GameActivity extends AppCompatActivity {
     private MenuItem leapCounter;
     private int leaps;
     private Menu menuReference;
-
+    private ConnectivityManager cm;
+    private NetworkInfo activeNetwork;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         firstUse = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (!isConnected()) {
+            Toast.makeText(getApplicationContext(), "No network connection found", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         trans = (LinearLayout)findViewById(R.id.pseudoblur);
         Toolbar gameToolbar = (Toolbar) findViewById(R.id.game_toolbar);
         setSupportActionBar(gameToolbar);
@@ -73,7 +86,11 @@ public class GameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         difficulty = (Difficulty) intent.getSerializableExtra(DIFFICULTY);
-        sharedPreferences = this.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
+        try {
+            sharedPreferences = new SharedPrefsLoadTask().execute(this).get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, e.getMessage());
+        }
         gameFinished = false;
         path = "";
         leaps = 0;
@@ -108,6 +125,11 @@ public class GameActivity extends AppCompatActivity {
         startTimeTracking();
     }
 
+    private boolean isConnected() {
+        activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
     Runnable intervalChecker = new Runnable() {
         @Override
         public void run() {
@@ -137,6 +159,17 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "Switched to landscape");
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "Switched to portrait");
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (!firstBackTap) {
             super.onBackPressed();
@@ -147,8 +180,8 @@ public class GameActivity extends AppCompatActivity {
                 getSupportActionBar().show();
             }
             catch (NullPointerException e) {
-            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
-        }
+                Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
+            }
             secondsToOverlayHide = 6;
             firstBackTap = false;
         }
@@ -196,6 +229,12 @@ public class GameActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.no_way_out, Toast.LENGTH_SHORT).show();
                 return true;
             }
+
+            if (!isConnected()) {
+                Toast.makeText(getApplicationContext(), "No network connection found", Toast.LENGTH_LONG).show();
+                return true;
+            }
+
             view.loadUrl(url);
             url = parseUnicodeString(view.getUrl());
 

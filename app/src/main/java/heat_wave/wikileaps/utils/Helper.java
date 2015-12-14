@@ -2,11 +2,13 @@ package heat_wave.wikileaps.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -15,11 +17,16 @@ import java.util.TreeMap;
 public class Helper {
     private static ArrayList<String> paths;
     private static SharedPreferences preferences;
+    public static final String TAG = "wiki_leaps";
 
     private Helper() {}
 
-    public static void init(Context newContext){
-        preferences = newContext.getSharedPreferences("WIKI_LEAPS", Context.MODE_PRIVATE);
+    public static void init(final Context newContext){
+        try {
+            preferences = new SharedPrefsLoadTask().execute(newContext).get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public static void setContext(Context newContext) {
