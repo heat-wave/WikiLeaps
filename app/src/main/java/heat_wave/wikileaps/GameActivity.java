@@ -22,15 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import heat_wave.wikileaps.utils.Animations;
 import heat_wave.wikileaps.utils.Difficulty;
+import heat_wave.wikileaps.utils.DistanceMeasurer;
 import heat_wave.wikileaps.utils.Helper;
-import heat_wave.wikileaps.utils.OnSwipeTouchListener;
 import heat_wave.wikileaps.utils.SharedPrefsLoadTask;
+import heat_wave.wikileaps.utils.ui.Animations;
+import heat_wave.wikileaps.utils.ui.OnSwipeTouchListener;
+
+import static heat_wave.wikileaps.utils.Helper.parseUnicodeString;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -38,48 +40,45 @@ public class GameActivity extends AppCompatActivity {
 
     public static final String DIFFICULTY = "difficulty";
     public static final String TAG = "wiki_leaps";
+    private final int OVERLAY_SHOW_DURATION = 6;
 
     private Difficulty difficulty;
     private String path;
     private SharedPreferences sharedPreferences;
     private boolean gameFinished;
-    private int secondsToOverlayHide = 6;
+    private int secondsToOverlayHide = OVERLAY_SHOW_DURATION;
     private TextView topSlide;
     private TextView bottomSlide;
     private Handler timeHandler;
     private String startingPage;
     private WebView webView;
-    private LinearLayout trans;
+    private LinearLayout overlay;
     private boolean firstUse;
     private boolean firstBackTap;
     private MenuItem leapCounter;
     private int leaps;
-    private Menu menuReference;
-    private ConnectivityManager cm;
-    private NetworkInfo activeNetwork;
+    private ConnectivityManager connectivityManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         firstUse = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (!isConnected()) {
             Toast.makeText(getApplicationContext(), "No network connection found", Toast.LENGTH_LONG).show();
             finish();
         }
 
-        trans = (LinearLayout)findViewById(R.id.pseudoblur);
+        overlay = (LinearLayout) findViewById(R.id.pseudoblur);
         Toolbar gameToolbar = (Toolbar) findViewById(R.id.game_toolbar);
-        setSupportActionBar(gameToolbar);
-        try {
-            getSupportActionBar().setTitle(R.string.app_name);
-        }
-        catch (NullPointerException e) {
-            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
+        if (gameToolbar != null) {
+            gameToolbar.setTitle(R.string.app_name);
+            setSupportActionBar(gameToolbar);
         }
 
-        Helper.init(this);
+        Helper.initSharedPrefs(this);
 
         topSlide = (TextView) findViewById(R.id.topSlide);
         bottomSlide = (TextView) findViewById(R.id.bottomSlide);
@@ -97,9 +96,10 @@ public class GameActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.wiki);
         webView.setWebViewClient(new TrackingWebViewClient());
         webView.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
             public void onSwipeBottom() {
                 getSupportActionBar().show();
-                secondsToOverlayHide = 6;
+                secondsToOverlayHide = OVERLAY_SHOW_DURATION;
             }
 
             @Override
@@ -126,14 +126,13 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private boolean isConnected() {
-        activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    Runnable intervalChecker = new Runnable() {
+    private Runnable intervalChecker = new Runnable() {
         @Override
         public void run() {
-
             if (secondsToOverlayHide > 0) {
                 secondsToOverlayHide--;
                 if (secondsToOverlayHide == 1) {
@@ -145,6 +144,11 @@ public class GameActivity extends AppCompatActivity {
                 bottomSlide.setText(parseUnicodeString(difficulty.toString()).replace('_', ' '));
                 String url = parseUnicodeString(webView.getUrl());
                 topSlide.setText(url.substring(url.lastIndexOf('/') + 1).replace('_', ' '));
+                try {
+                    DistanceMeasurer.getShortestPath(topSlide.getText().toString(), bottomSlide.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             timeHandler.postDelayed(intervalChecker, 1000);
         }
@@ -173,16 +177,12 @@ public class GameActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!firstBackTap) {
             super.onBackPressed();
-        }
-        else {
+        } else {
             Toast.makeText(this, "Press again to leave this game", Toast.LENGTH_SHORT).show();
-            try {
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().show();
             }
-            catch (NullPointerException e) {
-                Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
-            }
-            secondsToOverlayHide = 6;
+            secondsToOverlayHide = OVERLAY_SHOW_DURATION;
             firstBackTap = false;
         }
     }
@@ -191,8 +191,7 @@ public class GameActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_bar, menu);
-        this.menuReference = menu;
-        leapCounter = menuReference.findItem(R.id.leaps);
+        leapCounter = menu.findItem(R.id.leaps);
         return true;
     }
 
@@ -200,9 +199,8 @@ public class GameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_replay:
-                //if (!path.contains(" -> "));
                 webView.loadUrl(startingPage);
-                String url = parseUnicodeString(webView.getUrl());
+                String url = Helper.parseUnicodeString(webView.getUrl());
                 path = url.substring(url.lastIndexOf('/') + 1).replace('_', ' ');
                 firstUse = true;
                 showOverlay();
@@ -212,7 +210,7 @@ public class GameActivity extends AppCompatActivity {
 
             case R.id.action_help:
                 showOverlay();
-                secondsToOverlayHide = 6;
+                secondsToOverlayHide = OVERLAY_SHOW_DURATION;
                 return true;
 
             default:
@@ -241,8 +239,7 @@ public class GameActivity extends AppCompatActivity {
             if (path.length() == 0) {
                 startingPage = url;
                 leaps = 0;
-            }
-            else {
+            } else {
                 leaps++;
             }
             leapCounter.setTitle(Integer.toString(leaps));
@@ -260,16 +257,6 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    public String parseUnicodeString(String source) {
-        try {
-            source = URLDecoder.decode(source, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-        }
-        return source;
-    }
-
     public void showOverlay() {
         topSlide.bringToFront();
         if (!firstUse)
@@ -281,8 +268,8 @@ public class GameActivity extends AppCompatActivity {
             bottomSlide.startAnimation(Animations.inFromRightAnimation());
         bottomSlide.setVisibility(View.VISIBLE);
 
-        trans.startAnimation(Animations.fadeInAnimation());
-        trans.setVisibility(View.VISIBLE);
+        overlay.startAnimation(Animations.fadeInAnimation());
+        overlay.setVisibility(View.VISIBLE);
 
         firstUse = false;
     }
@@ -299,14 +286,12 @@ public class GameActivity extends AppCompatActivity {
             bottomSlide.startAnimation(Animations.outToRightAnimation());
             bottomSlide.setVisibility(View.INVISIBLE);
         }
-        if (trans.getVisibility() != View.INVISIBLE) {
-            trans.startAnimation(Animations.fadeOutAnimation());
-            trans.setVisibility(View.INVISIBLE);
+        if (overlay.getVisibility() != View.INVISIBLE) {
+            overlay.startAnimation(Animations.fadeOutAnimation());
+            overlay.setVisibility(View.INVISIBLE);
         }
-        try {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Failed to interact with action bar: " +  e.getMessage());
         }
     }
 }

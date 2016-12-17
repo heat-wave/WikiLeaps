@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import heat_wave.wikileaps.utils.Helper;
-import heat_wave.wikileaps.utils.HistoryRecyclerAdapter;
-import heat_wave.wikileaps.utils.HistorySelectedListener;
-import heat_wave.wikileaps.utils.RecyclerDividersDecorator;
+import heat_wave.wikileaps.utils.ui.HistoryRecyclerAdapter;
+import heat_wave.wikileaps.utils.ui.HistorySelectedListener;
+import heat_wave.wikileaps.utils.ui.RecyclerDividersDecorator;
 
 public class HistoryActivity extends Activity implements HistorySelectedListener {
 

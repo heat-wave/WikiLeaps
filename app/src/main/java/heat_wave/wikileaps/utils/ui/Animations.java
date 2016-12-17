@@ -1,8 +1,7 @@
-package heat_wave.wikileaps.utils;
+package heat_wave.wikileaps.utils.ui;
 
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
-import android.animation.Animator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
@@ -22,13 +21,13 @@ public class Animations {
     }
 
     public static Animation outToLeftAnimation() {
-        Animation outtoLeft = new TranslateAnimation(
+        Animation outToLeft = new TranslateAnimation(
                 Animation.RELATIVE_TO_PARENT,  0.0f, Animation.RELATIVE_TO_PARENT,  -1.0f,
                 Animation.RELATIVE_TO_PARENT,  0.0f, Animation.RELATIVE_TO_PARENT,   0.0f
         );
-        outtoLeft.setDuration(500);
-        outtoLeft.setInterpolator(new AccelerateInterpolator());
-        return outtoLeft;
+        outToLeft.setDuration(500);
+        outToLeft.setInterpolator(new AccelerateInterpolator());
+        return outToLeft;
     }
 
     public static Animation inFromLeftAnimation() {
@@ -41,13 +40,13 @@ public class Animations {
         return inFromLeft;
     }
     public static Animation outToRightAnimation() {
-        Animation outtoRight = new TranslateAnimation(
+        Animation outToRight = new TranslateAnimation(
                 Animation.RELATIVE_TO_PARENT,  0.0f, Animation.RELATIVE_TO_PARENT,  +1.0f,
                 Animation.RELATIVE_TO_PARENT,  0.0f, Animation.RELATIVE_TO_PARENT,   0.0f
         );
-        outtoRight.setDuration(500);
-        outtoRight.setInterpolator(new AccelerateInterpolator());
-        return outtoRight;
+        outToRight.setDuration(500);
+        outToRight.setInterpolator(new AccelerateInterpolator());
+        return outToRight;
     }
 
     public static Animation fadeInAnimation() {

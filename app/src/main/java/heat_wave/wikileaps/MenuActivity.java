@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ViewFlipper;
 
-import heat_wave.wikileaps.utils.Animations;
+import heat_wave.wikileaps.utils.ui.Animations;
 import heat_wave.wikileaps.utils.Difficulty;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 

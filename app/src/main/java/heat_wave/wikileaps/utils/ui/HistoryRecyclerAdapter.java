@@ -1,4 +1,4 @@
-package heat_wave.wikileaps.utils;
+package heat_wave.wikileaps.utils.ui;
 
 /**
  * Created by heat_wave on 11/16/15.
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import heat_wave.wikileaps.R;
+import heat_wave.wikileaps.utils.Helper;
 
 public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecyclerAdapter.HighscoreViewHolder>
         implements View.OnClickListener {
@@ -35,9 +36,9 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     @Override
     public void onBindViewHolder(HighscoreViewHolder holder, int position) {
-        String path = Helper.getHistory(position);
-        holder.highscoreNameView.setText(path.substring(0, path.indexOf('\u21d2')) +
-            path.substring(path.lastIndexOf('\u21d2')));
+        String path = Helper.getHistoryAt(position);
+        holder.highscoreNameView.setText(String.format("%s%s", path.substring(0, path.indexOf('\u21d2')),
+                path.substring(path.lastIndexOf('\u21d2'))));
         holder.itemView.setTag(R.id.tag_highscore, path);
     }
 
